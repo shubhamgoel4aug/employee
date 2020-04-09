@@ -1,0 +1,44 @@
+---
+apiVersion: v1
+kind: service
+metadata:
+  name: employee-portal-service
+  labels:
+    app: employee-label-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 8110
+    targetPort: 1433
+  selector:
+    app: employee-selector-app
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: employee-portal
+  label:
+    app: employee-label-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: employee-label-app
+  template:
+    metadata:
+      labels:
+        app: employee-label-app
+    spec:
+      containers:
+      - name: employee-database
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        ports:
+        - containerPort: 1433
+      - name: employee-api
+        image: app-api:dev
+        ports:
+        - containerPort: 5001
+      - name: employee-web
+        image: app-web:dev
+        ports:
+        - containerPort: 80

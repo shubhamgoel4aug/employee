@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+
+  database:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    environment:
+      - SA_PASSWORD=king@1234
+      - ACCEPT_EULA=Y
+    ports:
+      - "8110:1433"
+    container_name: app_db_con
+
+  api:
+    build:
+      context: ./EmployeeBackEnd/EmployeeBackEnd/bin/Debug/netcoreapp3.1
+      args:
+        - Database_Server=$database
+    image: app-api:dev
+    ports:
+      - "8111:5001"
+    container_name: app_api_con
+    depends_on:
+      - database
+
+  web:
+    build:
+      context: ./EmployeeFrontEnd/dist/EmployeeFrontEnd
+    image: app-ui:dev
+    ports:
+      - "8112:80"
+    container_name: app_web_con
+    depends_on:
+      - database
+      - api
+
+
+  
