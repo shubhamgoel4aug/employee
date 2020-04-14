@@ -1,0 +1,1 @@
+echo "Hello"sed -i -E "s/Data\sSource=[a-zA-Z0-9]*;{1}/Data Source=hello;/" "bin/Debug/data/appsettings.json"dotnet bin/Debug/data/EmployeeBackend.dll

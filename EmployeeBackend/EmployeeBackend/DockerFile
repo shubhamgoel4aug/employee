@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/core/sdk
+
+ENV DATABASE_SERVER=
+
+COPY . /app
+WORKDIR /app
+RUN dotnet build
+RUN rm -rf Controllers/ EmployeeBackend.csproj  Program.cs  Startup.cs appsettings.json  obj/ DockerFile Models/ Properties/  appsettings.Development.json
+# RUN sed -i -E "s/Data\sSource=[a-zA-Z0-9]*;{1}/Data Source=$DATABASE_SERVER;/" bin/Debug/netcoreapp3.1/appsettings.json
+ENV ASPNETCORE_URLS="http://*:5001"
+EXPOSE 5001/tcp
+CMD ./start.sh
+# ENTRYPOINT ["dotnet", "bin/Debug/netcoreapp3.1/EmployeeBackend.dll"]
